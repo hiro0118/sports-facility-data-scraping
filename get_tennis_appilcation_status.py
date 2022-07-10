@@ -102,10 +102,8 @@ def export_data(cell_data_list):
   current_time = datetime.now().strftime("%Y%m%d%H%M%S")
   file_name = "output/tennis_data_" + current_time + ".csv" 
 
-  print(cell_data_list[0].keys())
   with open(file_name, "w", encoding="UTF8", newline="") as file:
-    field_names = ["date", "park", "start", "end", "courts", "applications", "ratio"]
-    writer = csv.DictWriter(file, fieldnames=field_names)
+    writer = csv.DictWriter(file, fieldnames=cell_data_list[0].keys())
     writer.writeheader()
     writer.writerows(cell_data_list)
 
