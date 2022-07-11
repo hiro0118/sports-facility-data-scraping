@@ -7,6 +7,7 @@ from selenium.common.exceptions import NoSuchElementException
 import csv
 from datetime import datetime
 import login_info
+import re
 
 URL_HOME = "https://yoyaku.sports.metro.tokyo.lg.jp/web/"
 URL_LOGIN = URL_HOME + "rsvLoginUserAction.do"
@@ -64,7 +65,8 @@ def get_park_id_list(driver):
 
 
 def get_cell_data(cell, park_name: str):
-  href_split = cell.get_attribute("href").split("%20")
+
+  href_split = cell.get_attribute("href").split(",%20")
 
   courts = 0
   applications = 0
@@ -77,8 +79,7 @@ def get_cell_data(cell, park_name: str):
   return {
     "date": href_split[len(href_split) - 5],
     "park": park_name,
-    "start": href_split[len(href_split) - 4],
-    "end": href_split[len(href_split) - 3],
+    "time": href_split[len(href_split) - 4] + "-" + href_split[len(href_split) - 3],
     "courts": courts,
     "applications": applications,
     "ratio": float(applications) / float(courts)
@@ -151,6 +152,6 @@ def main():
 
   if (len(cell_data_list) != 0):
     export_data(cell_data_list)
- 
+
 
 main()
