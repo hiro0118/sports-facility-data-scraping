@@ -7,11 +7,13 @@ from selenium.common.exceptions import NoSuchElementException
 import csv
 from datetime import datetime
 import login_info
-import re
 
 URL_HOME = "https://yoyaku.sports.metro.tokyo.lg.jp/web/"
 URL_LOGIN = URL_HOME + "rsvLoginUserAction.do"
 URL_MAIN = URL_HOME + "rsvWUA_Action.do"
+
+CHROME_DRIVER_PATH = "./lib/chromedriver.exe"
+OUTPUT_PATH = "output/"
 
 WAIT_SEC = 2
 WAIT_SEC_FOR_LOGIN = 4
@@ -21,7 +23,7 @@ def create_driver():
   options.add_experimental_option('excludeSwitches', ['enable-logging'])
   options.use_chromium = True
 
-  driver = webdriver.Chrome(executable_path="./chromedriver.exe", options=options)
+  driver = webdriver.Chrome(executable_path=CHROME_DRIVER_PATH, options=options)
   return driver
 
 
@@ -101,7 +103,7 @@ def find_next_week_button(driver):
 
 def export_data(cell_data_list):
   current_time = datetime.now().strftime("%Y%m%d%H%M%S")
-  file_name = "output/tennis_data_" + current_time + ".csv" 
+  file_name = OUTPUT_PATH + "tennis_data_" + current_time + ".csv" 
 
   with open(file_name, "w", encoding="UTF8", newline="") as file:
     writer = csv.DictWriter(file, fieldnames=cell_data_list[0].keys())
@@ -144,7 +146,7 @@ def main():
         break
 
     sleep(WAIT_SEC)
-
+    break
     # Go back to the park selection page.
     driver.find_element(By.XPATH, "//a[contains(@href,\"gLotWTransLotInstGrpPageMoveAction\")]").click()
 

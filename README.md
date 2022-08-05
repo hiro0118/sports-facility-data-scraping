@@ -21,9 +21,9 @@ The following need to be installed to run the python sripts. (Thinking of runnin
 - python 3.10.5
 - pip 22.0.4
 
-The dependencies can be installed using pip and the `pip_list.txt` file. The data scraping process is mainly done using Selenium.
+The dependencies can be installed using pip and the `requirements.txt` file. The data scraping process is mainly done using Selenium.
 ```
-pip isntall -r pip_list.txt
+pip isntall -r requiremets.txt
 ```
 
 # How to run the script
