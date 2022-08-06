@@ -146,7 +146,7 @@ def main():
         break
 
     sleep(WAIT_SEC)
-    break
+
     # Go back to the park selection page.
     driver.find_element(By.XPATH, "//a[contains(@href,\"gLotWTransLotInstGrpPageMoveAction\")]").click()
 
