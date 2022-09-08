@@ -1,11 +1,14 @@
 # coding: UTF-8
 
-from time import sleep
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException
 import csv
+import json
 from datetime import datetime
+from time import sleep
+
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
+
 import login_info
 
 URL_HOME = "https://yoyaku.sports.metro.tokyo.lg.jp/web/"
@@ -101,7 +104,7 @@ def find_next_week_button(driver):
   return None
 
 
-def export_data(cell_data_list):
+def export_csv_data(cell_data_list):
   current_time = datetime.now().strftime("%Y%m%d%H%M%S")
   file_name = OUTPUT_PATH + "tennis_data_" + current_time + ".csv" 
 
@@ -109,6 +112,14 @@ def export_data(cell_data_list):
     writer = csv.DictWriter(file, fieldnames=cell_data_list[0].keys())
     writer.writeheader()
     writer.writerows(cell_data_list)
+
+
+def export_json_data(cell_data_list):
+  current_time = datetime.now().strftime("%Y%m%d%H%M%S")
+  file_name = OUTPUT_PATH + "tennis_data_" + current_time + ".json" 
+
+  with open(file_name, "w", encoding="UTF8", newline="") as file:
+    json.dump(cell_data_list, file)
 
 
 def main():  
@@ -153,7 +164,8 @@ def main():
   driver.close()
 
   if (len(cell_data_list) != 0):
-    export_data(cell_data_list)
+    export_csv_data(cell_data_list)
+    export_json_data(cell_data_list)
 
 
 main()
