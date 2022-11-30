@@ -1,2 +1,2 @@
-ID = "00000000"
-PASSWORD = "20001010"
+ID = ""
+PASSWORD = ""

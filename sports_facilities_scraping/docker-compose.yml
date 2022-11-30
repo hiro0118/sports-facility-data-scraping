@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+
+  availability:
+    container_name: availability
+    build: .
+    shm_size: "2gb"
+
+networks:
+  default:
+      external:
+        name: selenium_backend
