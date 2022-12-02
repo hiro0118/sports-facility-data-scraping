@@ -33,19 +33,21 @@ def get_text(parent: WebElement, element: Element) -> str:
     return parent.find_element(element.by, element.path).text
 
 
+def weekend_element_on(date: str) -> Element:
+    path = f"//td[@bgcolor='#ffdcf5' or @bgcolor='#e6e6fa']//a[@class='calclick' and text()={date}]"
+    return Element(By.XPATH, path)
+
 ########## MULTIFUNCTIONAL SITE ##########
 
 # MAIN PAGE MAIIN
-
 PURPOSE_SEARCH = Element(By.XPATH, "//a[contains(@href,'rsvPurposeSearch')]")
 TENNIS_HARD = Element(By.XPATH, "//span[text()='テニス（ハード）']")
 TENNIS_OMNI = Element(By.XPATH, "//span[text()='テニス（人工芝）']")
 AVAILABILITY_SEARCH = Element(By.XPATH, "//input[contains(@id,'srchBtn')]")
 
 # AVAILABILITY PAGE
-
 ACTIVE_WEEKEND = Element(
-    By.XPATH, "//td[@bgcolor='#ffdcf5' or @bgcolor='#e6e6fa' or @bgcolor='#2efecd']//a[@class='calclick']")
+    By.XPATH, "//td[@bgcolor='#ffdcf5' or @bgcolor='#e6e6fa']//a[@class='calclick']")
 PARK_TABLE = Element(
     By.XPATH, "//div[@id='isNotEmptyPager']/table[@class='tablebg2']")
 PARK_NAME = Element(By.XPATH, ".//span[@id='bnamem']")

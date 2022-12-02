@@ -3,13 +3,14 @@
 from time import sleep
 
 import element
-import urls
 from court import Court
-from element import find_elements, get_text, pause_and_click
+from element import (find_elements, get_text, pause_and_click,
+                     weekend_element_on)
+
 from selenium import webdriver
 
-#SELENIUM = 'http://localhost:4444/wd/hub'
-SELENIUM = 'http://selenium-chrome:4444/wd/hub'
+SELENIUM_ADDRESS = 'http://selenium-chrome:4444/wd/hub'
+MULTIFUNCTIONAL_MAIN_PAGE = "https://yoyaku.sports.metro.tokyo.lg.jp/user/view/user/homeIndex.html"
 
 WAIT_SEC = 1
 WAIT_INITIAL = 2
@@ -19,7 +20,7 @@ def create_driver() -> webdriver.Remote:
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
     driver = webdriver.Remote(
-        command_executor=SELENIUM, options=options)
+        command_executor=SELENIUM_ADDRESS, options=options)
     return driver
 
 
@@ -34,18 +35,24 @@ def get_formatted_date(driver: webdriver.Remote):
     return f'{y}/{m}/{d}'
 
 
+def get_weekend_dates(driver: webdriver.Remote) -> list[str]:
+    result: list[str] = []
+    active_weekends = find_elements(driver, element.ACTIVE_WEEKEND)
+    for active_weekend in active_weekends:
+        result.append(active_weekend.text)
+    return result
+
+
 def get_available_courts_from_page(driver: webdriver.Remote) -> list[Court]:
-    available_courts: list[Court] = []
+    result: list[Court] = []
 
     # For each weekend
-    active_weekends_num = len(find_elements(driver, element.ACTIVE_WEEKEND))
-    weekend_idx: int = 0
-    while weekend_idx < active_weekends_num:
+    weekend_dates = get_weekend_dates(driver)
+    for weekend_date in weekend_dates:
 
-        active_weekends = find_elements(driver, element.ACTIVE_WEEKEND)
-        active_weekends[weekend_idx].click()
-
-        date = get_formatted_date(driver)
+        # Go to the next weekend day.
+        pause_and_click(driver, weekend_element_on(weekend_date))
+        date_info = get_formatted_date(driver)  # yyyy/mm/dd
 
         # For each park tables page.
         next_park_tables_page_exists = True
@@ -71,8 +78,8 @@ def get_available_courts_from_page(driver: webdriver.Remote) -> list[Court]:
                         time = times[available_cell_id].text
                         if time.__len__() == 4:
                             time = '0' + time
-                        new_avaiable_court = Court(date, time, park_name)
-                        available_courts.append(new_avaiable_court)
+                        new_avaiable_court = Court(date_info, time, park_name)
+                        result.append(new_avaiable_court)
                         print(new_avaiable_court)
 
             # Go to the next set of park tables. Leave the loop if it's the last page.
@@ -81,30 +88,30 @@ def get_available_courts_from_page(driver: webdriver.Remote) -> list[Court]:
             except Exception:
                 next_park_tables_page_exists = False
 
-        weekend_idx += 1
-
-    return available_courts
+    return result
 
 
 def get_available_courts() -> list[Court]:
     driver = create_driver()
 
-    sleep(WAIT_INITIAL)
-    driver.get(urls.MULTIFUNCTIONAL_MAIN)
+    try:
+        sleep(WAIT_INITIAL)
+        driver.get(MULTIFUNCTIONAL_MAIN_PAGE)
 
-    # Go to the availability page
-    pause_and_click(driver, element.PURPOSE_SEARCH)
-    pause_and_click(driver, element.TENNIS_HARD)
-    pause_and_click(driver, element.TENNIS_OMNI)
-    pause_and_click(driver, element.AVAILABILITY_SEARCH)
+        # Go to the availability page
+        pause_and_click(driver, element.PURPOSE_SEARCH)
+        pause_and_click(driver, element.TENNIS_HARD)
+        pause_and_click(driver, element.TENNIS_OMNI)
+        pause_and_click(driver, element.AVAILABILITY_SEARCH)
 
-    # Check current month
-    available_courts: list[Court] = get_available_courts_from_page(driver)
+        # Check current month
+        available_courts: list[Court] = get_available_courts_from_page(driver)
 
-    # Check next month
-    pause_and_click(driver, element.NEXT_MONTH)
-    available_courts.extend(get_available_courts_from_page(driver))
+        # Check next month
+        pause_and_click(driver, element.NEXT_MONTH)
+        available_courts.extend(get_available_courts_from_page(driver))
 
-    driver.close()
+    finally:
+        driver.close()
 
     return available_courts

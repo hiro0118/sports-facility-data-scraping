@@ -10,9 +10,8 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 
 import login_info
-import sports_facilities_scraping.urls as urls
 
-URL_HOME = "https://yoyaku.sports.metro.tokyo.lg.jp/web/"
+SIMPLIFIED_MAIN_PAGE = "https://yoyaku.sports.metro.tokyo.lg.jp/web/"
 
 CHROME_DRIVER_PATH = "./lib/chromedriver.exe"
 OUTPUT_PATH = "output/"
@@ -31,7 +30,7 @@ def log_in(driver):
   print("logging in...")
   sleep(WAIT_SEC)
   # Go to home page
-  driver.get(urls.SIMPLIFIED_MAIN)
+  driver.get(SIMPLIFIED_MAIN_PAGE)
   sleep(WAIT_SEC)
   # Go to login page
   driver.switch_to.frame("pawae1002")
