@@ -10,18 +10,6 @@ HEADERS = {
     'Authorization': 'Bearer ' + LINE_TOKEN,
 }
 
-PARKS_TO_CHECK: list[str] = [
-    '日比谷公園',
-    '芝公園',
-    '篠崎公園',
-    '亀戸中央公園',
-    '木場公園',
-    '東綾瀬公園',
-    '大島小松川公園',
-    '大井ふ頭海浜公園',
-    '有明テニスの森公園'
-]
-
 
 def notify_availablity(courts: list[Court], weathers: list[Weather]):
 
@@ -37,8 +25,6 @@ def notify_availablity(courts: list[Court], weathers: list[Weather]):
 def build_court_info(courts: list[Court], weathers: list[Weather]):
     court_info = ''
     for court in courts:
-        if not need_to_check(court.park):
-            continue
         weather = get_weather_from_date(weathers, court.date)
         new_court = court.__str__() + weather.get_icon()
         if court_info.__len__() == 0:
@@ -46,13 +32,6 @@ def build_court_info(courts: list[Court], weathers: list[Weather]):
         else:
             court_info = court_info + '\n' + new_court
     return court_info
-
-
-def need_to_check(park: str) -> bool:
-    for park_to_check in PARKS_TO_CHECK:
-        if park_to_check in park:
-            return True
-    return False
 
 
 def build_body(court_info: str):

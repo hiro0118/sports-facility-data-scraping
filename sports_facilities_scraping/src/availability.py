@@ -15,6 +15,18 @@ MULTIFUNCTIONAL_MAIN_PAGE = "https://yoyaku.sports.metro.tokyo.lg.jp/user/view/u
 WAIT_SEC = 1
 WAIT_INITIAL = 2
 
+PARKS_TO_CHECK: list[str] = [
+    '日比谷公園',
+    '芝公園',
+    '篠崎公園',
+    '亀戸中央公園',
+    '木場公園',
+    '東綾瀬公園',
+    '大島小松川公園',
+    '大井ふ頭海浜公園',
+    '有明テニスの森公園'
+]
+
 
 def get_available_courts() -> list[Court]:
 
@@ -70,7 +82,12 @@ def get_available_courts_from_page(driver: webdriver.Remote) -> list[Court]:
             # For each park table.
             park_tables = find_elements(driver, element.PARK_TABLE)
             for park_table in park_tables:
+
+                # If the park is not in the list, skip it.
                 park_name = get_text(park_table, element.PARK_NAME)
+                if not need_to_check_park(park_name):
+                    continue
+
                 availablity_cells = find_elements(
                     park_table, element.AVAILABILITY_CELL)
 
@@ -100,6 +117,14 @@ def get_available_courts_from_page(driver: webdriver.Remote) -> list[Court]:
     return result
 
 
+def get_weekend_dates(driver: webdriver.Remote) -> list[str]:
+    result: list[str] = []
+    active_weekends = find_elements(driver, element.ACTIVE_WEEKEND)
+    for active_weekend in active_weekends:
+        result.append(active_weekend.text)
+    return result
+
+
 def get_formatted_date(driver: webdriver.Remote):
     y = get_text(driver, element.YEAR)
     m = get_text(driver, element.MONTH)
@@ -111,9 +136,8 @@ def get_formatted_date(driver: webdriver.Remote):
     return f'{y}/{m}/{d}'
 
 
-def get_weekend_dates(driver: webdriver.Remote) -> list[str]:
-    result: list[str] = []
-    active_weekends = find_elements(driver, element.ACTIVE_WEEKEND)
-    for active_weekend in active_weekends:
-        result.append(active_weekend.text)
-    return result
+def need_to_check_park(park: str) -> bool:
+    for park_to_check in PARKS_TO_CHECK:
+        if park_to_check in park:
+            return True
+    return False
