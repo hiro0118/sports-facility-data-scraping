@@ -9,8 +9,6 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 
-import login_info
-
 SIMPLIFIED_MAIN_PAGE = "https://yoyaku.sports.metro.tokyo.lg.jp/web/"
 
 CHROME_DRIVER_PATH = "./lib/chromedriver.exe"
