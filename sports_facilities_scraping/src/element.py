@@ -37,7 +37,6 @@ def weekend_element_on(date: str) -> Element:
     path = f"//td[@bgcolor='#ffdcf5' or @bgcolor='#e6e6fa']//a[@class='calclick' and text()={date}]"
     return Element(By.XPATH, path)
 
-########## MULTIFUNCTIONAL SITE ##########
 
 # MAIN PAGE MAIIN
 PURPOSE_SEARCH = Element(By.XPATH, "//a[contains(@href,'rsvPurposeSearch')]")

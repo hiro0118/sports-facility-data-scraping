@@ -16,31 +16,39 @@ WAIT_SEC = 1
 WAIT_INITIAL = 2
 
 
+def get_available_courts() -> list[Court]:
+
+    driver = create_driver()
+
+    try:
+        sleep(WAIT_INITIAL)
+        driver.get(MULTIFUNCTIONAL_MAIN_PAGE)
+
+        # Go to the availability page
+        pause_and_click(driver, element.PURPOSE_SEARCH)
+        pause_and_click(driver, element.TENNIS_HARD)
+        pause_and_click(driver, element.TENNIS_OMNI)
+        pause_and_click(driver, element.AVAILABILITY_SEARCH)
+
+        # Check current month
+        available_courts: list[Court] = get_available_courts_from_page(driver)
+
+        # Check next month
+        pause_and_click(driver, element.NEXT_MONTH)
+        available_courts.extend(get_available_courts_from_page(driver))
+
+    finally:
+        driver.quit()
+
+    return available_courts
+
+
 def create_driver() -> webdriver.Remote:
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
     driver = webdriver.Remote(
         command_executor=SELENIUM_ADDRESS, options=options)
     return driver
-
-
-def get_formatted_date(driver: webdriver.Remote):
-    y = get_text(driver, element.YEAR)
-    m = get_text(driver, element.MONTH)
-    d = get_text(driver, element.DATE)
-    if m.__len__() == 1:
-        m = '0' + m
-    if d.__len__() == 1:
-        d = '0' + d
-    return f'{y}/{m}/{d}'
-
-
-def get_weekend_dates(driver: webdriver.Remote) -> list[str]:
-    result: list[str] = []
-    active_weekends = find_elements(driver, element.ACTIVE_WEEKEND)
-    for active_weekend in active_weekends:
-        result.append(active_weekend.text)
-    return result
 
 
 def get_available_courts_from_page(driver: webdriver.Remote) -> list[Court]:
@@ -53,6 +61,7 @@ def get_available_courts_from_page(driver: webdriver.Remote) -> list[Court]:
         # Go to the next weekend day.
         pause_and_click(driver, weekend_element_on(weekend_date))
         date_info = get_formatted_date(driver)  # yyyy/mm/dd
+        print(f"Checking {date_info}...")
 
         # For each park tables page.
         next_park_tables_page_exists = True
@@ -91,27 +100,20 @@ def get_available_courts_from_page(driver: webdriver.Remote) -> list[Court]:
     return result
 
 
-def get_available_courts() -> list[Court]:
-    driver = create_driver()
+def get_formatted_date(driver: webdriver.Remote):
+    y = get_text(driver, element.YEAR)
+    m = get_text(driver, element.MONTH)
+    d = get_text(driver, element.DATE)
+    if m.__len__() == 1:
+        m = '0' + m
+    if d.__len__() == 1:
+        d = '0' + d
+    return f'{y}/{m}/{d}'
 
-    try:
-        sleep(WAIT_INITIAL)
-        driver.get(MULTIFUNCTIONAL_MAIN_PAGE)
 
-        # Go to the availability page
-        pause_and_click(driver, element.PURPOSE_SEARCH)
-        pause_and_click(driver, element.TENNIS_HARD)
-        pause_and_click(driver, element.TENNIS_OMNI)
-        pause_and_click(driver, element.AVAILABILITY_SEARCH)
-
-        # Check current month
-        available_courts: list[Court] = get_available_courts_from_page(driver)
-
-        # Check next month
-        pause_and_click(driver, element.NEXT_MONTH)
-        available_courts.extend(get_available_courts_from_page(driver))
-
-    finally:
-        driver.close()
-
-    return available_courts
+def get_weekend_dates(driver: webdriver.Remote) -> list[str]:
+    result: list[str] = []
+    active_weekends = find_elements(driver, element.ACTIVE_WEEKEND)
+    for active_weekend in active_weekends:
+        result.append(active_weekend.text)
+    return result

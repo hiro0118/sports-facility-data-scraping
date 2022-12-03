@@ -2,12 +2,25 @@ version: "3"
 
 services:
 
+  selenium-chrome:
+    container_name: selenium-chrome
+    image: selenium/standalone-chrome:4.7
+    ports:
+      - 4444:4444
+      - 5900:5900
+    shm_size: "2gb"
+    networks:
+      - backend
+
   availability:
     container_name: availability
     build: .
     shm_size: "2gb"
+    networks:
+      - backend
+    depends_on:
+      - selenium-chrome
 
 networks:
-  default:
-      external:
-        name: selenium_backend
+  backend:
+    driver: bridge

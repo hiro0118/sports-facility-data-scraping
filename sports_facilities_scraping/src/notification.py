@@ -23,11 +23,15 @@ PARKS_TO_CHECK: list[str] = [
 ]
 
 
-def need_to_check(park: str) -> bool:
-    for park_to_check in PARKS_TO_CHECK:
-        if park_to_check in park:
-            return True
-    return False
+def notify_availablity(courts: list[Court], weathers: list[Weather]):
+
+    court_info = build_court_info(courts, weathers)
+    body = build_body(court_info)
+
+    response = requests.post(PUSH_URL, headers=HEADERS, json=body)
+
+    print("Status Code: ", response.status_code)
+    print("JSON response: ", response.json())
 
 
 def build_court_info(courts: list[Court], weathers: list[Weather]):
@@ -44,6 +48,13 @@ def build_court_info(courts: list[Court], weathers: list[Weather]):
     return court_info
 
 
+def need_to_check(park: str) -> bool:
+    for park_to_check in PARKS_TO_CHECK:
+        if park_to_check in park:
+            return True
+    return False
+
+
 def build_body(court_info: str):
     body = {
         'to': LINE_CHANNEL_ID,
@@ -55,14 +66,3 @@ def build_body(court_info: str):
         ]
     }
     return body
-
-
-def notify_availablity(courts: list[Court], weathers: list[Weather]):
-
-    court_info = build_court_info(courts, weathers)
-    body = build_body(court_info)
-
-    response = requests.post(PUSH_URL, headers=HEADERS, json=body)
-
-    print("Status Code: ", response.status_code)
-    print("JSON response: ", response.json())

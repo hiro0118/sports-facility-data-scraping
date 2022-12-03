@@ -1,12 +1,15 @@
-FROM python:3
+FROM python:3.9-alpine
 USER root
 
-RUN mkdir -p /root/src
-COPY src /root/src
-WORKDIR /root/src
+RUN apk add --no-cache tzdata
+ENV TZ=Asia/Tokyo
 
 RUN pip install schedule
 RUN pip install requests
 RUN pip install selenium
+
+RUN mkdir -p /root/src
+COPY src /root/src
+WORKDIR /root/src
 
 CMD ["python","-u","check_availability.py"]
