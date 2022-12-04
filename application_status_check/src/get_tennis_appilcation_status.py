@@ -34,8 +34,8 @@ def log_in(driver):
   driver.switch_to.frame("pawae1002")
   driver.find_element(By.XPATH, "//a[contains(@href,\"gRsvLoginUserAction\")]").click()
   # Input login info
-  driver.find_element(By.NAME, "userId").send_keys(login_info.ID)
-  driver.find_element(By.NAME, "password").send_keys(login_info.PASSWORD)
+  driver.find_element(By.NAME, "userId").send_keys(config.ID)
+  driver.find_element(By.NAME, "password").send_keys(config.PASSWORD)
   sleep(WAIT_SEC_FOR_LOGIN)
   # Click log-in button
   driver.find_element(By.XPATH, "//a[contains(@href,\"submitLogin\")]").click()
