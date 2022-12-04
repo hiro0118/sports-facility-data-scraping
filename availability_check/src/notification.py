@@ -3,7 +3,7 @@ from config import LINE_CHANNEL_ID, LINE_TOKEN
 from court import Court
 from weather import Weather, get_weather_from_date
 
-PUSH_URL = 'https://api.line.me/v2/bot/message/push'
+BROADCAST_URL = 'https://api.line.me/v2/bot/message/broadcast'
 
 HEADERS = {
     'Content-Type': 'application/json',
@@ -16,7 +16,7 @@ def notify_availablity(courts: list[Court], weathers: list[Weather]):
     court_info = build_court_info(courts, weathers)
     body = build_body(court_info)
 
-    response = requests.post(PUSH_URL, headers=HEADERS, json=body)
+    response = requests.post(BROADCAST_URL, headers=HEADERS, json=body)
 
     print("Status Code: ", response.status_code)
     print("JSON response: ", response.json())
@@ -36,7 +36,6 @@ def build_court_info(courts: list[Court], weathers: list[Weather]):
 
 def build_body(court_info: str):
     body = {
-        'to': LINE_CHANNEL_ID,
         'messages': [
             {
                 'type': 'text',
