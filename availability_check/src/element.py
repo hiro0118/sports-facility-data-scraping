@@ -38,13 +38,13 @@ def weekend_element_on(date: str) -> Element:
     return Element(By.XPATH, path)
 
 
-# MAIN PAGE MAIIN
+# Main page
 PURPOSE_SEARCH = Element(By.XPATH, "//a[contains(@href,'rsvPurposeSearch')]")
 TENNIS_HARD = Element(By.XPATH, "//span[text()='テニス（ハード）']")
 TENNIS_OMNI = Element(By.XPATH, "//span[text()='テニス（人工芝）']")
 AVAILABILITY_SEARCH = Element(By.XPATH, "//input[contains(@id,'srchBtn')]")
 
-# AVAILABILITY PAGE
+# Availability page
 ACTIVE_WEEKEND = Element(
     By.XPATH, "//td[@bgcolor='#ffdcf5' or @bgcolor='#e6e6fa']//a[@class='calclick']")
 PARK_TABLE = Element(

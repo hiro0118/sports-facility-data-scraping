@@ -1,5 +1,5 @@
 import requests
-from config import LINE_CHANNEL_ID, LINE_TOKEN
+from config import LINE_TOKEN
 from court import Court
 from weather import Weather, get_weather_from_date
 
@@ -39,7 +39,7 @@ def build_body(court_info: str):
         'messages': [
             {
                 'type': 'text',
-                'text': f"Available tennis courts found! 🎾\n\n{court_info}\n\nBook from here: https://yoyaku.sports.metro.tokyo.lg.jp/sp/",
+                'text': f"Available courts found! 🎾\n\n{court_info}\n\nBook from here: https://yoyaku.sports.metro.tokyo.lg.jp/sp/",
             }
         ]
     }

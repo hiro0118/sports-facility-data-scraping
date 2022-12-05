@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+
+  application-selenium:
+    container_name: application-selenium
+    image: selenium/standalone-chrome:4.7
+    ports:
+      - 4444:14444
+      - 5900:15900
+    shm_size: "2gb"
+    networks:
+      - application-backend
+
+  application-check:
+    container_name: application-check
+    build: .
+    shm_size: "2gb"
+    networks:
+      - application-backend
+    depends_on:
+      - application-selenium
+
+networks:
+  application-backend:
+    driver: bridge
