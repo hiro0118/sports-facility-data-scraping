@@ -6,8 +6,8 @@ services:
     container_name: application-selenium
     image: selenium/standalone-chrome:4.7
     ports:
-      - 4444:14444
-      - 5900:15900
+      - 4445:4444
+      - 5901:5900
     shm_size: "2gb"
     networks:
       - application-backend

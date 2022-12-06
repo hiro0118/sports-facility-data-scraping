@@ -56,7 +56,10 @@ GO_TO_TENNIS = Element(By.XPATH, "//a[contains(@href,'130')]")
 PARK_IN_LIST = Element(By.XPATH, "//a[contains(@href,'sendBldGrpCd')]")
 PARK_NAME = Element(By.XPATH, "//td[@class='lotselectlist'][2]")
 CELL = Element(By.XPATH, "//a[contains(@href,'selectOnKoma')]")
-GO_TO_NEXT_WEEK = Element(By.XPATH, "//a[contains(@href,'gLotWTransLotInstSrchVacantAction')]")
-WEEK_BUTTON = Element(By.XPATH, "//a[contains(@href,'gLotWTransLotInstSrchVacantAction')]")
+GO_TO_NEXT_WEEK = Element(
+    By.XPATH, "//a[contains(@href,'gLotWTransLotInstSrchVacantAction')]")
+WEEK_BUTTON = Element(
+    By.XPATH, "//a[contains(@href,'gLotWTransLotInstSrchVacantAction')]")
 GO_TO_NEXT_WEEK = Element(By.XPATH, ".//img[@alt='次の週']")
-GO_BACK_TO_PARK_LIST = Element(By.XPATH, "//a[contains(@href,'gLotWTransLotInstGrpPageMoveAction')]")
+GO_BACK_TO_PARK_LIST = Element(
+    By.XPATH, "//a[contains(@href,'gLotWTransLotInstGrpPageMoveAction')]")
