@@ -11,6 +11,8 @@ services:
     shm_size: "2gb"
     networks:
       - backend
+    environment:
+      - SE_DRAIN_AFTER_SESSION_COUNT=1
 
   availability:
     container_name: availability

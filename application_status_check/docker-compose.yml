@@ -11,6 +11,8 @@ services:
     shm_size: "2gb"
     networks:
       - application-backend
+    environment:
+      - SE_DRAIN_AFTER_SESSION_COUNT=1
 
   application-check:
     container_name: application-check

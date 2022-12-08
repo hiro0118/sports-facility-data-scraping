@@ -89,11 +89,11 @@ def get_available_courts_from_page(driver: webdriver.Remote) -> list[Court]:
                     continue
 
                 # Get available times and register them to the result.
-                available_times: list[str] = get_available_times()
+                available_times: list[str] = get_available_times(park_table)
                 for available_time in available_times:
                     new_court = Court(date_info, available_time, park_name)
                     result.append(new_court)
-                    print("Found " + new_court)
+                    print(new_court)
 
             # Go to the next set of park tables if it exists.
             try:

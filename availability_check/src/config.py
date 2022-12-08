@@ -1,1 +1,2 @@
 LINE_TOKEN = ''
+ADMIN_ID = ''
