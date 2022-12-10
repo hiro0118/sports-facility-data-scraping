@@ -17,7 +17,6 @@ services:
   availability:
     container_name: availability
     build: .
-    shm_size: "2gb"
     networks:
       - backend
     depends_on:

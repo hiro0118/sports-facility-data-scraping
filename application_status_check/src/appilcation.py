@@ -10,7 +10,7 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.remote.webelement import WebElement
 
-SELENIUM_URL = "http://application-selenium:4444/wd/hub"
+SELENIUM_URL = "http://localhost:4445/wd/hub"
 SIMPLIFIED_MAIN_PAGE = "https://yoyaku.sports.metro.tokyo.lg.jp/web/"
 
 WAIT_SEC = 1
@@ -29,11 +29,13 @@ def get_application_status() -> list:
         go_to_tennis_page(driver)
 
         # Check each park.
+        print("Checking application_status...")
         for park_id in get_park_id_list(driver):
 
             # Go to the park page.
             pause_and_click(driver, create_park_element(park_id))
             park_name = get_text(driver, element.PARK_NAME)
+            print(f"Checking {park_name}...")
 
             # Check each week.
             next_week_exists = True

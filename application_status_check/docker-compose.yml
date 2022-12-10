@@ -17,7 +17,10 @@ services:
   application-check:
     container_name: application-check
     build: .
-    shm_size: "2gb"
+    volumes:
+      - type: bind
+        source: "/c/Users/Public/output/"
+        target: "/root/src/output/"
     networks:
       - application-backend
     depends_on:
