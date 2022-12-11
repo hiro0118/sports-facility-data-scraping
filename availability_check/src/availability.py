@@ -9,7 +9,7 @@ from element import (find_elements, get_text, pause_and_click,
 from selenium import webdriver
 from selenium.webdriver.remote.webelement import WebElement
 
-SELENIUM_ADDRESS = 'http://localhost:4444/wd/hub'
+SELENIUM_ADDRESS = 'http://selenium-chrome:4444/wd/hub'
 MULTIFUNCTIONAL_MAIN_PAGE = "https://yoyaku.sports.metro.tokyo.lg.jp/user/view/user/homeIndex.html"
 
 WAIT_SEC = 1

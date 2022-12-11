@@ -23,12 +23,14 @@ def check_availability():
             notify_availablity(available_courts, weather_info)
         print(get_current_datetime() + " Task completed.")
     except Exception as e:
+        print(e)
         notify_error(e)
 
 
 def check_availability_scheduled():
     for time in SCHEDULE_TIMES:
         schedule.every().day.at(time).do(check_availability)
+        print(f"Task scheduled at {time}.")
     while True:
         schedule.run_pending()
         sleep(LOOP_INTERVAL)

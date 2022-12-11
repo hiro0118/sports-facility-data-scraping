@@ -10,7 +10,7 @@ services:
       - 5900:5900
     shm_size: "2gb"
     environment:
-      - SE_DRAIN_AFTER_SESSION_COUNT=1
+      - SE_DRAIN_AFTER_SESSION_COUNT=0
     networks:
       - backend
 

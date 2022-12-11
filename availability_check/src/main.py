@@ -8,6 +8,7 @@ SCHEDULED_MODE = 'scheduled'
 
 def main():
     mode = os.environ.get(MODE_KEY)
+    print(f"Execution mode: {mode}")
     if mode == SCHEDULED_MODE:
         check_availability_scheduled()
     else:

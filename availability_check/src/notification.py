@@ -1,6 +1,7 @@
 import traceback
+
 import requests
-from config import LINE_TOKEN, ADMIN_ID
+from config import ADMIN_ID, LINE_TOKEN
 from court import Court
 from weather import Weather, get_weather_from_date
 
@@ -18,28 +19,28 @@ def broadcast(msg: str):
         'messages': [
             {
                 'type': 'text',
-                'text': msg
+                'text': f'{msg}'
             }
         ]
     }
     response = requests.post(BROADCAST_URL, headers=HEADERS, json=body)
-    print("Status Code: ", response.status_code)
-    print("JSON response: ", response.json())
+    print(
+        f"Broadcasted a message: status={response.status_code}, response={response.json()}")
 
 
 def push(to: str, msg: str):
     body = {
-        'to': to,
+        'to': f'{to}',
         'messages': [
             {
                 'type': 'text',
-                'text': msg
+                'text': f'{msg}'
             }
         ]
     }
     response = requests.post(PUSH_URL, headers=HEADERS, json=body)
-    print("Status Code: ", response.status_code)
-    print("JSON response: ", response.json())
+    print(
+        f"Pushed a message: status={response.status_code}, response={response.json()}")
 
 
 def notify_availablity(courts: list[Court], weathers: list[Weather]):
@@ -51,7 +52,7 @@ def notify_availablity(courts: list[Court], weathers: list[Weather]):
             court_info = new_court
         else:
             court_info = court_info + '\n' + new_court
-    msg = f"Available courts found! 🎾\n\n{court_info}\n\nBook from here: https://yoyaku.sports.metro.tokyo.lg.jp/sp/"
+    msg = f"Available courts found!🎾\n\n{court_info}\n\nBook from here: https://yoyaku.sports.metro.tokyo.lg.jp/sp/"
     broadcast(msg)
 
 
