@@ -9,14 +9,16 @@ services:
       - 4444:4444
       - 5900:5900
     shm_size: "2gb"
-    networks:
-      - backend
     environment:
       - SE_DRAIN_AFTER_SESSION_COUNT=1
+    networks:
+      - backend
 
   availability:
     container_name: availability
     build: .
+    environment:
+      - MODE=scheduled
     networks:
       - backend
     depends_on:
