@@ -17,6 +17,8 @@ services:
   application-check:
     container_name: application-check
     build: .
+    environment:
+      - MODE=local
     volumes:
       - type: bind
         source: "/c/Users/Public/output/"

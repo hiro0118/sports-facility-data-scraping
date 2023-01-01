@@ -14,11 +14,11 @@ services:
     networks:
       - backend
 
-  availability:
+  availability-check:
     container_name: availability
     build: .
     environment:
-      - MODE=single
+      - MODE=test
     networks:
       - backend
     depends_on:
