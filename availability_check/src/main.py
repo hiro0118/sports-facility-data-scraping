@@ -10,7 +10,7 @@ from weather import get_weather
 MODE_KEY = 'MODE'
 SINGLE_MODE = 'single'
 SCHEDULED_MODE = 'scheduled'
-INITAL_WAIT = 5
+INITAL_WAIT = 10
 
 SCHEDULE_TIMES = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00",
                   "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"]

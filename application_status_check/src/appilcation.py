@@ -4,8 +4,8 @@ from time import sleep
 
 import config
 import element
-from element import (create_park_element, find_element, find_elements,
-                     get_text, pause_and_click)
+from element import (create_park_element, find_element, find_element_below,
+                     find_elements, get_text, pause_and_click)
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.remote.webelement import WebElement
@@ -123,7 +123,7 @@ def find_next_week_button(driver: webdriver.Remote):
     week_buttons = find_elements(driver, element.WEEK_BUTTON)
     for week_button in week_buttons:
         try:
-            return find_element(week_button, element.GO_TO_NEXT_WEEK)
+            return find_element_below(week_button, element.GO_TO_NEXT_WEEK)
         except NoSuchElementException:
             continue
     # Next week button doesn't exist.

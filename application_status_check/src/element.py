@@ -1,5 +1,6 @@
 from time import sleep
 
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
@@ -7,29 +8,33 @@ DEFAULT_PAUSE_SEC = 1
 
 
 class Element:
-    def __init__(self, by: By, path: str):
+    def __init__(self, by: str, path: str):
         self.by = by
         self.path = path
 
 
-def click(parent: WebElement, element: Element):
+def click(parent: webdriver.Remote, element: Element):
     parent.find_element(element.by, element.path).click()
 
 
-def pause_and_click(parent: WebElement, element: Element, pause: int = DEFAULT_PAUSE_SEC):
+def pause_and_click(parent: webdriver.Remote, element: Element, pause: int = DEFAULT_PAUSE_SEC):
     sleep(pause)
     parent.find_element(element.by, element.path).click()
 
 
-def find_element(parent: WebElement, element: Element) -> WebElement:
+def find_element(parent: webdriver.Remote, element: Element) -> WebElement:
     return parent.find_element(element.by, element.path)
 
 
-def find_elements(parent: WebElement, element: Element) -> list[WebElement]:
+def find_element_below(parent: WebElement, element: Element) -> WebElement:
+    return parent.find_element(element.by, element.path)
+
+
+def find_elements(parent: webdriver.Remote, element: Element) -> list[WebElement]:
     return parent.find_elements(element.by, element.path)
 
 
-def get_text(parent: WebElement, element: Element) -> str:
+def get_text(parent: webdriver.Remote, element: Element) -> str:
     return parent.find_element(element.by, element.path).text
 
 

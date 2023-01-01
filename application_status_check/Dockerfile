@@ -12,4 +12,4 @@ RUN mkdir -p /root/src
 COPY src /root/src
 WORKDIR /root/src
 
-CMD ["python","-u","check_application.py"]
+CMD ["python","-u","main.py"]
