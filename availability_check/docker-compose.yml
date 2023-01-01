@@ -18,7 +18,7 @@ services:
     container_name: availability
     build: .
     environment:
-      - MODE=scheduled
+      - MODE=single
     networks:
       - backend
     depends_on:

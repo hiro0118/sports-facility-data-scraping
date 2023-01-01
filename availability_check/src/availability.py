@@ -4,12 +4,12 @@ from time import sleep
 
 import element
 from court import Court
-from element import (find_elements, get_text, pause_and_click,
-                     weekend_element_on)
+from element import (find_elements, find_elements_below, get_text,
+                     get_text_below, pause_and_click, weekend_element_on)
 from selenium import webdriver
 from selenium.webdriver.remote.webelement import WebElement
+from utils import log
 
-SELENIUM_ADDRESS = 'http://selenium-chrome:4444/wd/hub'
 MULTIFUNCTIONAL_MAIN_PAGE = "https://yoyaku.sports.metro.tokyo.lg.jp/user/view/user/homeIndex.html"
 
 WAIT_SEC = 1
@@ -29,9 +29,9 @@ PARKS_TO_CHECK: list[str] = [
 ]
 
 
-def get_available_courts() -> list[Court]:
+def get_available_courts(selenium_address: str) -> list[Court]:
 
-    driver = create_driver()
+    driver = create_driver(selenium_address)
 
     try:
         sleep(WAIT_INITIAL)
@@ -56,11 +56,11 @@ def get_available_courts() -> list[Court]:
     return available_courts
 
 
-def create_driver() -> webdriver.Remote:
+def create_driver(selenium_address: str) -> webdriver.Remote:
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
     driver = webdriver.Remote(
-        command_executor=SELENIUM_ADDRESS, options=options)
+        command_executor=selenium_address, options=options)
     return driver
 
 
@@ -74,7 +74,7 @@ def get_available_courts_from_page(driver: webdriver.Remote) -> list[Court]:
         # Go to the next weekend day.
         pause_and_click(driver, weekend_element_on(weekend_date))
         date_info = get_formatted_date(driver)  # yyyy/mm/dd
-        print(f"Checking {date_info}...")
+        log(f"Checking {date_info}...")
 
         # For each park tables page.
         next_park_tables_page_exists = True
@@ -85,7 +85,7 @@ def get_available_courts_from_page(driver: webdriver.Remote) -> list[Court]:
             for park_table in park_tables:
 
                 # If the park is not in the list, skip it.
-                park_name = get_text(park_table, element.PARK_NAME)
+                park_name = get_text_below(park_table, element.PARK_NAME)
                 if not need_to_check_park(park_name):
                     continue
 
@@ -94,7 +94,7 @@ def get_available_courts_from_page(driver: webdriver.Remote) -> list[Court]:
                 for available_time in available_times:
                     new_court = Court(date_info, available_time, park_name)
                     result.append(new_court)
-                    print(new_court)
+                    log(new_court.__str__())
 
             # Go to the next set of park tables if it exists.
             try:
@@ -134,7 +134,8 @@ def need_to_check_park(park: str) -> bool:
 def get_available_times(park_table: WebElement) -> list[str]:
 
     # Check available column IDs.
-    availablity_cells = find_elements(park_table, element.AVAILABILITY_CELL)
+    availablity_cells = find_elements_below(
+        park_table, element.AVAILABILITY_CELL)
     available_cell_ids: list[int] = []
     for idx, availability_cell in enumerate(availablity_cells):
         if availability_cell.text != '0':
@@ -146,7 +147,7 @@ def get_available_times(park_table: WebElement) -> list[str]:
 
     # Get available times based on the IDs.
     result: list[str] = []
-    times = find_elements(park_table, element.TIME)
+    times = find_elements_below(park_table, element.TIME)
     for available_cell_id in available_cell_ids:
         available_time = times[available_cell_id].text
         if available_time.__len__() == 4:

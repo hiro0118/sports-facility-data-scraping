@@ -43,7 +43,7 @@ def push(to: str, msg: str):
         f"Pushed a message: status={response.status_code}, response={response.json()}")
 
 
-def notify_availablity(courts: list[Court], weathers: list[Weather]):
+def notify_availablity(courts: list[Court], weathers: list[Weather], broad: bool = True):
     court_info = ''
     for court in courts:
         weather = get_weather_from_date(weathers, court.date)
@@ -53,9 +53,12 @@ def notify_availablity(courts: list[Court], weathers: list[Weather]):
         else:
             court_info = court_info + '\n' + new_court
     msg = f"Available courts found!🎾\n\n{court_info}\n\nBook from here: https://yoyaku.sports.metro.tokyo.lg.jp/sp/"
-    broadcast(msg)
+    if (broad):
+        broadcast(msg)
+    else:
+        push(ADMIN_ID, msg)
 
 
 def notify_error(e: Exception):
     error_msg = traceback.format_exception_only(type(e), e)
-    push(ADMIN_ID, error_msg)
+    push(ADMIN_ID, error_msg.__str__())
