@@ -23,8 +23,7 @@ SELENIUM_IN_LOCALHOST = 'http://localhost:4444/wd/hub'
 
 
 def main():
-    mode = os.environ.get(MODE_KEY)
-    mdoe = get_mode()
+    mode = get_mode()
     log(f"Starting task in {mode} mode.")
     if mode == SCHEDULED_MODE:
         schedule_task(SCHEDULE_TIMES, check_availability,
