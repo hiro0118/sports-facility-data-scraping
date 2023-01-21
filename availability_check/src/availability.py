@@ -3,6 +3,7 @@
 from time import sleep
 
 import element
+from filter import need_to_check_park, need_to_check_time
 from court import Court
 from element import (find_elements, find_elements_below, get_text,
                      get_text_below, pause_and_click, weekend_element_on)
@@ -14,19 +15,6 @@ MULTIFUNCTIONAL_MAIN_PAGE = "https://yoyaku.sports.metro.tokyo.lg.jp/user/view/u
 
 WAIT_SEC = 1
 WAIT_INITIAL = 2
-
-PARKS_TO_CHECK: list[str] = [
-    '日比谷公園',
-    '芝公園',
-    '猿江恩賜公園',
-    '篠崎公園',
-    '亀戸中央公園',
-    '木場公園',
-    '東綾瀬公園',
-    '大島小松川公園',
-    '大井ふ頭海浜公園',
-    '有明テニスの森公園'
-]
 
 
 def get_available_courts(selenium_address: str) -> list[Court]:
@@ -93,6 +81,9 @@ def get_available_courts_from_page(driver: webdriver.Remote) -> list[Court]:
                 available_times: list[str] = get_available_times(park_table)
                 for available_time in available_times:
                     new_court = Court(date_info, available_time, park_name)
+                    if not need_to_check_time(available_time, available_time):
+                        log(f"Ignored {new_court}.")
+                        continue
                     result.append(new_court)
                     log(new_court.__str__())
 
@@ -122,13 +113,6 @@ def get_formatted_date(driver: webdriver.Remote):
     if d.__len__() == 1:
         d = '0' + d
     return f'{y}/{m}/{d}'
-
-
-def need_to_check_park(park: str) -> bool:
-    for park_to_check in PARKS_TO_CHECK:
-        if park_to_check in park:
-            return True
-    return False
 
 
 def get_available_times(park_table: WebElement) -> list[str]:
