@@ -32,7 +32,8 @@ def get_available_courts(selenium_address: str) -> list[Court]:
         pause_and_click(driver, element.AVAILABILITY_SEARCH)
 
         # Check current month
-        available_courts: list[Court] = get_available_courts_from_page(driver)
+        available_courts: list[Court] = []
+        available_courts.extend(get_available_courts_from_page(driver))
 
         # Check next month
         pause_and_click(driver, element.NEXT_MONTH)
@@ -81,7 +82,7 @@ def get_available_courts_from_page(driver: webdriver.Remote) -> list[Court]:
                 available_times: list[str] = get_available_times(park_table)
                 for available_time in available_times:
                     new_court = Court(date_info, available_time, park_name)
-                    if not need_to_check_time(available_time, available_time):
+                    if not need_to_check_time(date_info, available_time):
                         log(f"Ignored {new_court}.")
                         continue
                     result.append(new_court)
