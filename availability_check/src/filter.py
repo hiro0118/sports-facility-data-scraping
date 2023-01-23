@@ -1,5 +1,4 @@
 import datetime
-from utils import log
 
 PARKS_TO_CHECK: list[str] = [
     '日比谷公園',
@@ -45,7 +44,6 @@ def need_to_check_time(date: str, time: str):
         # Illegal data, but return true to not overlook possible issues.
         return True
     for time_to_ignore in TIMES_TO_IGNORE:
-        time_to_ignore.matches(int(ymd[0]), int(ymd[1]), int(ymd[2]), time)
-        if time == time_to_ignore:
+        if time_to_ignore.matches(int(ymd[0]), int(ymd[1]), int(ymd[2]), time):
             return False
     return True
